@@ -36,7 +36,7 @@ def detect_truth(statement):
 
 # --- 1. MAIN HUBS ---
 # --- 1. MAIN HUBS ---
-@app.route('/', methods=['GET', 'HEAD'])
+@app.route('/', methods=['GET','POST', 'HEAD'])
 def index(): 
     return render_template('index.html')
 
