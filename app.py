@@ -152,4 +152,6 @@ def view_partial_order(): return render_template('partial_order.html')
 
 # --- 6. SERVER START ---
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
+
