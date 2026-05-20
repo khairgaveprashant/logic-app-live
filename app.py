@@ -35,8 +35,11 @@ def detect_truth(statement):
     return not detected_base_truth if is_negated else detected_base_truth
 
 # --- 1. MAIN HUBS ---
-@app.route('/')
-def index(): return render_template('index.html')
+# --- 1. MAIN HUBS ---
+@app.route('/', methods=['GET', 'HEAD'])
+def index(): 
+    return render_template('index.html')
+
 
 @app.route('/truth')
 def truth(): return render_template('truth.html')
