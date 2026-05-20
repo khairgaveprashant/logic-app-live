@@ -1,0 +1,203 @@
+
+/* Cinematic Dark Theme with Animated Background */
+:root {
+    --bg-color: #050a18;
+    --card-bg: rgba(30, 41, 59, 0.6);
+    --accent-blue: #38bdf8;
+    --accent-purple: #a855f7;
+    --text-glow: 0 0 15px rgba(255, 255, 255, 0.7), 0 0 30px #38bdf8;
+}
+
+body {
+    /* High-contrast blues: Deep Navy -> Electric Blue -> Cyan -> Royal Blue */
+    background: linear-gradient(-45deg, #020617, #075985, #0891b2, #1e40af);
+    background-size: 400% 400%;
+    
+    /* Faster speed (10s) makes the transition much more obvious */
+    animation: liquidGradient 10s ease infinite;
+    
+    color: #f1f5f9;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+@keyframes liquidGradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Let's add a slight glass-blur overlay to ensure text stays readable 
+   against the stronger background colors */
+.container {
+    position: relative;
+    z-index: 1;
+    background: rgba(5, 10, 24, 0.4); /* Subtle dark tint */
+    backdrop-filter: blur(5px); /* Softens the moving background under the text */
+    border-radius: 50px;
+    margin-top: 20px;
+}
+
+.main-title {
+    text-align: center;
+    font-size: 5.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    /* Reduced bottom margin to bring the intro paragraphs closer to the title */
+    margin-top: 0; 
+    margin-bottom: 20px; 
+    color: #ffffff;
+    text-shadow: var(--text-glow);
+    animation: pulseGlow 3s infinite alternate;
+}
+@keyframes pulseGlow {
+    from { text-shadow: 0 0 10px #fff, 0 0 20px #38bdf8; }
+    to { text-shadow: 0 0 20px #fff, 0 0 40px #a855f7; }
+}
+
+h2 {
+    text-align: center;
+    font-size: 2.8rem;
+    color: var(--accent-blue);
+    margin: 80px 0 40px 0;
+}
+
+.intro-text {
+    text-align: center;
+    font-size: 1.1rem;
+    max-width: 950px;
+    margin: 0 auto 30px auto;
+    color: #cbd5e1;
+    line-height: 1.8; /* Ensures 10 lines look balanced */
+}
+
+/* Grids - 3 columns for everything */
+.grid-layout {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin: 40px 0;
+}
+
+/* Stunning Cards */
+.card {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    padding: 40px 25px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-align: center;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.card h3 {
+    margin-top: 0;
+    color: var(--accent-blue);
+    font-size: 1.5rem;
+}
+
+.card p {
+    font-size: 0.95rem;
+    color: #94a3b8;
+}
+
+/* Card Hover Animation */
+.card:hover {
+    transform: scale(1.1) translateY(-15px);
+    border-color: var(--accent-purple);
+    box-shadow: 0 15px 40px rgba(168, 85, 247, 0.4);
+    background: rgba(30, 41, 59, 0.9);
+}
+
+/* Why Discrete Section */
+.highlight-box {
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.05), rgba(168, 85, 247, 0.05));
+    padding: 40px 50px 70px 50px; /* Reduced top padding from 70px to 40px */
+    border-radius: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 100px 0;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Ensures content stays centered horizontally */
+}
+
+.highlight-box h2 {
+    margin-top: 0; /* Removes the default top margin that pushes the heading down */
+    margin-bottom: 30px; /* Space between the heading and the paragraphs below */
+    font-size: 2.8rem;
+    color: var(--accent-blue);
+    text-align: center;
+}
+
+/* Navigation Links */
+.concept-card {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Initial Fade-In Animation */
+.fade-in {
+    animation: fadeInUp 1.5s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive fix for smaller screens */
+@media (max-width: 900px) {
+    .grid-layout { grid-template-columns: 1fr; }
+    .main-title { font-size: 3rem; }
+}
+.back-button-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 60px 0 40px; /* Adjusted margin for better flow */
+}
+
+.back-toolkit-capsule {
+    background-color: #ff0000 !important; /* The same bright red */
+    padding: 12px 35px; /* Thinner height, wide width for capsule look */
+    border-radius: 50px; /* High radius creates the capsule/pill shape */
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+}
+
+.back-toolkit-capsule:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 0, 0, 0.5);
+    background-color: #e60000 !important;
+}
+
+.back-text {
+    color: white !important;
+    font-size: 1.1rem; /* Smaller, more professional font size */
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.arrow {
+    font-size: 1.3rem;
+}

@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discrete Math Toolkit | Comprehensive Suite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;900&display=swap" rel="stylesheet">
+    <style>
+        /* Global Framework Styles & Variables */
+        :root {
+            --bg-primary: #0b1329;
+            --sidebar-bg: #1c2541;
+            --accent-blue: #38bdf8;
+            --accent-green: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-purple: #a855f7;
+            --accent-rose: #fb7185;
+            --accent-orange: #f97316;
+            --accent-slate: #94a3b8;
+            --accent-teal: #2dd4bf;
+            --accent-silver: #cbd5e1;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: #ffffff;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Navigation Layout */
+        #sidebar {
+            background-color: var(--sidebar-bg);
+            width: 320px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            border-right: 2px solid rgba(255, 255, 255, 0.05);
+            padding: 25px 15px;
+            box-shadow: 5px 0 25px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+
+        .sidebar-title {
+            font-size: 1.4rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+            color: #fff;
+            text-transform: uppercase;
+        }
+        
+        .sidebar-subtitle {
+            font-size: 0.8rem;
+            text-align: center;
+            color: var(--accent-blue);
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .nav-section {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.4);
+            margin: 15px 0 5px 10px;
+            font-weight: 600;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: none;
+            color: #cbd5e1;
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 4px;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+        }
+
+        .nav-btn.active {
+            background: var(--accent-blue);
+            color: #0b1329;
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+        }
+
+        /* Color Coding Sidebar Categories */
+        .nav-btn[data-type="relation"].active { background: var(--accent-purple); color: #fff; box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3); }
+        .nav-btn[data-type="set"].active { background: var(--accent-orange); color: #fff; box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3); }
+
+        /* Main Workspace Panel */
+        #workspace {
+            flex-grow: 1;
+            padding: 40px;
+            overflow-y: auto;
+            height: 100vh;
+            position: relative;
+        }
+
+        .tab-content {
+            display: none;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Generic Embedded UI Core Styles */
+        @keyframes glow-blue { 0% { text-shadow: 0 0 10px #fff; } 100% { text-shadow: 0 0 25px var(--accent-blue); } }
+        @keyframes glow-green { 0% { text-shadow: 0 0 10px #fff; } 100% { text-shadow: 0 0 25px var(--accent-green); } }
+        @keyframes glow-amber { 0% { text-shadow: 0 0 10px #fff; } 100% { text-shadow: 0 0 25px var(--accent-amber); } }
+        @keyframes glow-purple { 0% { text-shadow: 0 0 10px #fff; } 100% { text-shadow: 0 0 25px var(--accent-purple); } }
+        @keyframes glow-orange { 0% { text-shadow: 0 0 10px #fff; } 100% { text-shadow: 0 0 25px var(--accent-orange); } }
+        @keyframes glow-slate { 0% { text-shadow: 0 0 10px #fff; } 100% { text-shadow: 0 0 25px var(--accent-slate); } }
+        @keyframes glow-teal { 0% { text-shadow: 0 0 10px #fff; } 100% { text-shadow: 0 0 25px var(--accent-teal); } }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
+
+        .main-header { font-size: 3.5rem; margin: 0; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; text-align: center; }
+        .symbol-box { font-size: 4rem; margin-top: 5px; text-align: center; animation: float 3s ease-in-out infinite; }
+        
+        .content-box { width: 100%; background: rgba(255, 255, 255, 0.03); border-radius: 30px; padding: 40px; margin-top: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); backdrop-filter: blur(15px); }
+        .box-title { font-size: 2.2rem; font-weight: 800; text-transform: uppercase; margin-bottom: 20px; text-align: center; }
+        .para { font-size: 1.1rem; line-height: 1.8; color: #e2e8f0; text-align: justify; margin-bottom: 20px; }
+
+        /* Shared Component Utilities */
+        .true-text { color: #4ade80; text-shadow: 0 0 10px #4ade80; font-weight: bold; }
+        .false-text { color: #f87171; text-shadow: 0 0 10px #f87171; font-weight: bold; }
+        .sim-input, .input-panel input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white; margin-top: 10px; font-size: 1rem; }
+        table { width: 100%; border-collapse: collapse; background: rgba(30, 41, 59, 0.4); border-radius: 12px; overflow: hidden; margin-top: 20px; }
+        th, td { padding: 12px; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
+        th { background: rgba(255,255,255,0.05); }
+
+        .columns-wrapper, .triad-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-top: 40px; }
+        .column-box, .triad-card, .example-box { background: rgba(255, 255, 255, 0.02); border-radius: 20px; padding: 30px; border: 1px solid rgba(255,255,255,0.1); }
+        .column-title, .card-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 15px; text-transform: uppercase; }
+
+        .example-chip { background: rgba(0,0,0,0.2); border-left: 4px solid; padding: 15px; margin-bottom: 15px; border-radius: 0 8px 8px 0; }
+        .example-list { list-style: none; }
+        .example-list li { padding: 10px; margin-bottom: 8px; border-radius: 6px; background: rgba(255,255,255,0.02); }
+
+        .calc-btn { display: block; width: 100%; padding: 15px; background: transparent; font-weight: bold; font-size: 1.1rem; cursor: pointer; border-radius: 10px; transition: 0.2s; margin-top: 20px; text-transform: uppercase;}
+        .result-panel, .resultBox { display: none; margin-top: 30px; padding: 25px; background: rgba(0,0,0,0.4); border-radius: 15px; text-align: center; }
+
+        /* Venn Diagrams */
+        .venn-wrapper { display: flex; justify-content: center; align-items: center; height: 320px; position: relative; margin: 20px 0; }
+        .universal-box { width: 450px; height: 280px; border: 3px solid white; position: relative; display: flex; justify-content: center; align-items: center; border-radius: 8px;}
+        .universal-label { position: absolute; top: 10px; left: 15px; font-weight: 900; font-size: 1.5rem; }
+        .circle { width: 180px; height: 180px; border-radius: 50%; border: 3px solid white; position: absolute; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 1.4rem; }
+    </style>
+</head>
+<body>
+
+    <div id="sidebar">
+        <h1 class="sidebar-title">Discrete Math</h1>
+        <div class="sidebar-subtitle">Interactive Toolkit Dashboard</div>
+
+        <div class="nav-section">Logic Gates</div>
+        <button class="nav-btn active" onclick="switchTab('and-gate')" id="btn-and-gate" data-type="gate">⚡ AND Gate</button>
+        <button class="nav-btn" onclick="switchTab('implication-gate')" id="btn-implication-gate" data-type="gate">➔ Implication</button>
+        <button class="nav-btn" onclick="switchTab('biconditional-gate')" id="btn-biconditional-gate" data-type="gate">↔ Biconditional</button>
+
+        <div class="nav-section">Relations Dictionary</div>
+        <button class="nav-btn" onclick="switchTab('identity-relation')" id="btn-identity-relation" data-type="relation">🪞 Identity</button>
+        <button class="nav-btn" onclick="switchTab('empty-relation')" id="btn-empty-relation" data-type="relation">∅ Empty</button>
+        <button class="nav-btn" onclick="switchTab('antisymmetric-relation')" id="btn-antisymmetric-relation" data-type="relation">🛡️ Antisymmetric</button>
+        <button class="nav-btn" onclick="switchTab('asymmetric-relation')" id="btn-asymmetric-relation" data-type="relation">🏹 Asymmetric</button>
+        <button class="nav-btn" onclick="switchTab('equivalence-relation')" id="btn-equivalence-relation" data-type="relation">⚖️ Equivalence</button>
+
+        <div class="nav-section">Set Operations</div>
+        <button class="nav-btn" onclick="switchTab('set-difference')" id="btn-set-difference" data-type="set">➖ Difference (A - B)</button>
+        <button class="nav-btn" onclick="switchTab('set-complement')" id="btn-set-complement" data-type="set">🌓 Complement (A')</button>
+    </div>
+
+    <div id="workspace">
+
+        <div id="and-gate" class="tab-content active">
+            <div style="text-align: center;">
+                <h1 class="main-header" style="color: var(--accent-blue); animation: glow-blue 1.5s ease-in-out infinite alternate;">AND Gate</h1>
+                <div class="symbol-box">∧</div>
+            </div>
+            <div class="content-box" style="border: 3px solid var(--accent-blue);">
+                <h2 class="box-title" style="color: var(--accent-blue);">The Logical Conjunction</h2>
+                <p class="para">The AND operation evaluates to true if and only if all parameters are explicitly true. In hardware development networks, it functions as a critical filtration filter requiring all target states to pass.</p>
+                
+                <table>
+                    <thead>
+                        <tr><th>Statement P</th><th>Statement Q</th><th>Conjunction (P ∧ Q)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>True</td><td>True</td><td class="true-text">True</td></tr>
+                        <tr><td>True</td><td>False</td><td class="false-text">False</td></tr>
+                        <tr><td>False</td><td>True</td><td class="false-text">False</td></tr>
+                        <tr><td>False</td><td>False</td><td class="false-text">False</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="columns-wrapper">
+                <div class="column-box" style="border-color: var(--accent-blue);">
+                    <h3 class="column-title" style="color: var(--accent-blue);">Real-world Examples</h3>
+                    <ul class="example-list">
+                        <li style="background: rgba(56, 189, 248, 0.1);"><b>Atmospheric Conditions:</b> "It is raining" AND "I have an umbrella".</li>
+                        <li style="background: rgba(56, 189, 248, 0.1);"><b>Security Checks:</b> "Password Correct" AND "2FA Key Valid".</li>
+                    </ul>
+                </div>
+                <div class="column-box" style="border-color: var(--accent-blue);">
+                    <h3 class="column-title" style="color: var(--accent-blue);">Gate Simulator</h3>
+                    <label>Statement P Context:</label>
+                    <input type="text" id="and-stmtA" class="sim-input" placeholder="e.g., Target system is online">
+                    <label style="margin-top: 15px; display:block;">Statement Q Context:</label>
+                    <input type="text" id="and-stmtB" class="sim-input" placeholder="e.g., Credentials match">
+                    
+                    <button onclick="runAndSimulator()" class="calc-btn" style="color: var(--accent-blue); border: 2px solid var(--accent-blue);">Check Conjunction ⚡</button>
+                    <div id="and-resultBox" class="resultBox" style="border: 1px solid var(--accent-blue);">
+                        <h4 style="color: var(--accent-blue);">Evaluated Conjunction State:</h4>
+                        <p id="and-resStatement" style="font-size: 1.2rem; margin-top: 10px;"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="implication-gate" class="tab-content">
+            <div style="text-align: center;">
+                <h1 class="main-header" style="color: var(--accent-teal); animation: glow-teal 1.5s ease-in-out infinite alternate;">Implication Gate</h1>
+                <div class="symbol-box">➔</div>
+            </div>
+            <div class="content-box" style="border: 3px solid var(--accent-teal);">
+                <h2 class="box-title" style="color: var(--accent-teal);">Conditional Operator</h2>
+                <p class="para">The Implication operator (If P, then Q) produces a false value only in cases where a true premise yields a false realization. If the condition is false, the execution evaluates to valid vacuously.</p>
+                
+                <table>
+                    <thead>
+                        <tr><th>Premise P</th><th>Conclusion Q</th><th>Implication (P → Q)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>True</td><td>True</td><td class="true-text">True</td></tr>
+                        <tr><td>True</td><td>False</td><td class="false-text">False</td></tr>
+                        <tr><td>False</td><td>True</td><td class="true-text">True (Vacuous)</td></tr>
+                        <tr><td>False</td><td>False</td><td class="true-text">True (Vacuous)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="columns-wrapper">
+                <div class="column-box" style="border-color: var(--accent-teal);">
+                    <h3 class="column-title" style="color: var(--accent-teal);">Real-world Examples</h3>
+                    <ul class="example-list">
+                        <li style="background: rgba(45, 212, 191, 0.1);"><b>The Contract Promise:</b> "If you achieve an A, then you will receive the scholarship prize."</li>
+                    </ul>
+                </div>
+                <div class="column-box" style="border-color: var(--accent-teal);">
+                    <h3 class="column-title" style="color: var(--accent-teal);">Gate Simulator</h3>
+                    <label>Premise P Context:</label>
+                    <input type="text" id="imp-stmtA" class="sim-input" placeholder="e.g., You complete the course code">
+                    <label style="margin-top: 15px; display:block;">Conclusion Q Context:</label>
+                    <input type="text" id="imp-stmtB" class="sim-input" placeholder="e.g., You earn the certificate badge">
+                    
+                    <button onclick="runImplicationSimulator()" class="calc-btn" style="color: var(--accent-teal); border: 2px solid var(--accent-teal);">Check Implication ⚡</button>
+                    <div id="imp-resultBox" class="resultBox" style="border: 1px solid var(--accent-teal);">
+                        <h4 style="color: var(--accent-teal);">Conditional Resolution:</h4>
+                        <p id="imp-resStatement" style="font-size: 1.2rem; margin-top: 10px;"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="biconditional-gate" class="tab-content">
+            <div style="text-align: center;">
+                <h1 class="main-header" style="color: #818cf8; animation: glow-blue 1.5s ease-in-out infinite alternate;">Biconditional</h1>
+                <div class="symbol-box">↔</div>
+            </div>
+            <div class="content-box" style="border: 3px solid #818cf8;">
+                <h2 class="box-title" style="color: #818cf8;">Equivalence Logics</h2>
+                <p class="para">The Biconditional statement (P if and only if Q) produces a true result when both arguments map cleanly to identical target truth values. Mutual alignment establishes consistency.</p>
+                
+                <table>
+                    <thead>
+                        <tr><th>Statement P</th><th>Statement Q</th><th>Biconditional (P ↔ Q)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>True</td><td>True</td><td class="true-text">True</td></tr>
+                        <tr><td>True</td><td>False</td><td class="false-text">False</td></tr>
+                        <tr><td>False</td><td>True</td><td class="false-text">False</td></tr>
+                        <tr><td>False</td><td>False</td><td class="true-text">True</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="columns-wrapper">
+                <div class="column-box" style="border-color: #818cf8;">
+                    <h3 class="column-title" style="color: #818cf8;">Real-world Application</h3>
+                    <ul class="example-list">
+                        <li style="background: rgba(129, 140, 248, 0.1);"><b>System Rules:</b> "An entity can travel internationally if and only if they possess an active passport."</li>
+                    </ul>
+                </div>
+                <div class="column-box" style="border-color: #818cf8;">
+                    <h3 class="column-title" style="color: #818cf8;">Gate Simulator</h3>
+                    <label>Statement P Context:</label>
+                    <input type="text" id="bi-stmtA" class="sim-input" placeholder="e.g., Balance remains positive">
+                    <label style="margin-top: 15px; display:block;">Statement Q Context:</label>
+                    <input type="text" id="bi-stmtB" class="sim-input" placeholder="e.g., The account status is active">
+                    
+                    <button onclick="runBiconditionalSimulator()" class="calc-btn" style="color: #818cf8; border: 2px solid #818cf8;">Check Equivalency ⚡</button>
+                    <div id="bi-resultBox" class="resultBox" style="border: 1px solid #818cf8;">
+                        <h4 style="color: #818cf8;">Biconditional Resolution:</h4>
+                        <p id="bi-resStatement" style="font-size: 1.2rem; margin-top: 10px;"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="identity-relation" class="tab-content">
+            <div style="text-align: center;">
+                <h1 class="main-header" style="color: var(--accent-silver); animation: glow-slate 1.5s ease-in-out infinite alternate;">Identity Relation</h1>
+                <div class="symbol-box">🪞</div>
+            </div>
+            <div class="content-box" style="border: 4px solid var(--accent-silver);">
+                <h2 class="box-title" style="color: var(--accent-silver);">The Perfect Mirror</h2>
+                <p class="para">An Identity Relation tracks mapping restricted purely to matching values. Every item elements link strictly to themselves without external links: I_A = { (x, x) | x ∈ A }.</p>
+            </div>
+
+            <div class="columns-wrapper">
+                <div class="example-box" style="border-color: var(--accent-silver);">
+                    <h3 class="column-title" style="color: var(--accent-silver);">Paradigm Contrasts</h3>
+                    <div class="example-chip" style="border-color: var(--accent-green);">
+                        <b>🚀 C++ Reference Model</b><br>
+                        A pointer referencing its precise unique allocated home address maps an identical reference path.
+                    </div>
+                    <div class="example-chip" style="border-color: var(--accent-rose);">
+                        <b>❌ Reflexive ≠ Identity</b><br>
+                        If set components build paths to external indices, the relation degrades from an exclusive Identity relation down to a basic Reflexive definition.
+                    </div>
+                </div>
+                <div class="column-box" style="border-color: var(--accent-silver);">
+                    <h3 class="column-title" style="color: var(--accent-silver);">Identity Tester</h3>
+                    <input type="text" id="identityInput" class="sim-input" placeholder="e.g., (1,1), (2,2), (3,3)">
+                    <button onclick="checkIdentity()" class="calc-btn" style="color: #fff; background: rgba(255,255,255,0.1); border: 2px solid var(--accent-silver);">Verify Identity Matrix ⚡</button>
+                    <div id="identity-resultBox" class="resultBox" style="border: 1px solid var(--accent-silver); font-size: 1.3rem; font-weight: bold;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="empty-relation" class="tab-content">
+            <div style="text-align: center;">
+                <h1 class="main-header" style="color: var(--accent-slate); animation: glow-slate 1.5s ease-in-out infinite alternate;">Empty Relation</h1>
+                <div class="symbol-box">∅</div>
+            </div>
+            <div class="content-box" style="border: 4px solid var(--accent-slate);">
+                <h2 class="box-title" style="color: var(--accent-slate);">The Absolute Void</h2>
+                <p class="para">An Empty Relation contains zero mapped coordinates. The network maps no functional relationships between nodes within the system: R = ∅.</p>
+            </div>
+
+            <div class="columns-wrapper">
+                <div class="example-box" style="border-color: var(--accent-slate);">
+                    <h3 class="column-title" style="color: var(--accent-slate);">Properties</h3>
+                    <div class="example-chip" style="border-color: #fff;">
+                        <b>💡 Vacuous Truths</b><br>
+                        Because there are zero interacting data records available to disprove the property laws, an Empty Relation qualifies as both Transitive and Symmetric by default!
+                    </div>
+                </div>
+                <div class="column-box" style="border-color: var(--accent-slate);">
+                    <h3 class="column-title" style="color: var(--accent-slate);">System Reset Simulation</h3>
+                    <div style="font-size: 1.8rem; text-align: center; margin: 15px 0; font-family: monospace; color: var(--accent-slate);" id="voidStatus">∅ R = { }</div>
+                    <button onclick="triggerVoidConfirmation()" class="calc-btn" style="color: var(--accent-slate); border: 2px solid var(--accent-slate);">Reset Network States ⚡</button>
+                    <div id="void-resultBox" class="resultBox" style="color: var(--accent-slate); font-weight: bold; border:1px solid var(--accent-slate);">SYSTEM STATE: INITIALIZED</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="antisymmetric-relation" class="tab-content">
+            <div style="text-align: center;">
+                <h1 class="main-header" style="color: var(--accent-green); animation: glow-green 1.5s ease-in-out infinite alternate;">Antisymmetric Relation</h1>
+                <div class="symbol-box">🛡️</div>
+            </div>
+            <div class="content-box" style="border: 4px solid var(--accent-green);">
+                <h2 class="box-title" style="color: var(--accent-green);">The Uni-Directional Guard</h2>
+                <p class="para">An Antisymmetric Relation mandates that if an element <i>a</i> links to <i>b</i>, and <i>b</i> links back to <i>a</i>, then <i>a</i> and <i>b</i> must be the exact same element. Return paths between distinct entities are strictly forbidden.</p>
+            </div>
+
+            <div class="columns-wrapper">
+                <div class="example-box" style="border-color: var(--accent-green);">
+                    <h3 class="column-title" style="color: var(--accent-green);">Mathematical Examples</h3>
+                    <div class="example-chip" style="border-color: var(--accent-green); background: rgba(16, 185, 129, 0.05);">
+                        <b>🔢 The "Less Than or Equal To" Hierarchy (≤)</b><br>
+                        If a ≤ b and b ≤ a, it forces the condition that a = b. Distinct elements can only route one way.
+                    </div>
+                </div>
+                <div class="column-box" style="border-color: var(--accent-green);">
+                    <h3 class="column-title" style="color: var(--accent-green);">Scan for Reciprocity</h3>
+                    <input type="text" id="antisymmetricInput" class="sim-input" placeholder="e.g., (1,2), (2,3), (1,1)">
+                    <button onclick="checkAntisymmetric()" class="calc-btn" style="color: #fff; background: var(--accent-green); border: none;">Scan Network Arrays ⚡</button>
+                    <div id="antisymmetric-resultBox" class="resultBox" style="font-size: 1.5rem; font-weight: 900;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="asymmetric-relation" class="tab-content">
+            <div style="text-align: center;">
+                <h1 class="main-header" style="color: var(--accent-amber); animation: glow-amber 1.5s ease-in-out infinite alternate;">Asymmetric Relation</h1>
+                <div class="symbol-box">➔</div>
+            </div>
+            <div class="content-box" style="border: 4px solid var(--accent-amber);">
+                <h2 class="box-title" style="color: var(--accent-amber);">The Absolute Vector</h2>
+                <p class="para">An Asymmetric Relation requires absolute asymmetry: if <i>a</i> maps to <i>b</i>, then <i>b</i> can never map back to <i>a</i>. Furthermore, no element can map to itself, completely outlawing self-loops.</p>
+            </div>
+
+            <div class="columns-wrapper">
+                <div class="example-box" style="border-color: var(--accent-amber);">
+                    <h3 class="column-title" style="color: var(--accent-amber);">System Verification Rules</h3>
+                    <div class="example-chip" style="border-color: var(--accent-amber); background: rgba(245, 158, 11, 0.05);">
+                        <b>Rule 1:</b> Absolute Vector Alignment (No reciprocal bidirectional loops allowed).<br>
+                        <b>Rule 2:</b> Strict Node Isolation (Zero self-reflexive loops permitted across the dataset).
+                    </div>
+                </div>
+                <div class="column-box" style="border-color: var(--accent-amber);">
+                    <h3 class="column-title" style="color: var(--accent-amber);">Asymmetric Structural Check</h3>
+                    <input type="text" id="asymmetricInput" class="sim-input" placeholder="e.g., (1,2), (2,3)">
+                    <button onclick="checkAsymmetric()" class="calc-btn" style="color: #000; background: var(--accent-amber); border: none;">Run Structural Check ⚡</button>
+                    <div id="asymmetric-resultBox" class="resultBox" style="font-size: 1.5rem; font-weight: 900;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="equivalence-relation" class="tab-content">
+            <div style="text-align: center;">
+                <h1 class="main-header" style="color: var(--accent-purple); animation: glow-purple 1.5s ease-in-out infinite alternate;">Equivalence Relation</h1>
+                <div class="symbol-box">⚖️</div>
+            </div>
+            <div class="content-box" style="border: 5px solid var(--accent-purple);">
+                <h2 class="box-title" style="color: var(--accent-purple);">The Ultimate Order</h2>
+                <p class="para">An Equivalence Relation establishes consistent data partitions by satisfying three foundational properties: Reflexivity, Symmetry, and Transitivity. This lets elements group smoothly into equivalence classes.</p>
+            </div>
+
+            <div class="triad-container">
+                <div class="triad-card" style="border-color: var(--accent-purple);">
+                    <h4 style="color: var(--accent-purple); margin-bottom:10px;">1. Reflexive</h4>
+                    <p style="font-size:0.9rem; color:#d8b4fe;">Every target item links directly to itself: (a, a) must exist for all elements.</p>
+                </div>
+                <div class="triad-card" style="border-color: var(--accent-purple);">
+                    <h4 style="color: var(--accent-purple); margin-bottom:10px;">2. Symmetric</h4>
+                    <p style="font-size:0.9rem; color:#d8b4fe;">All connections are mutual: if (a, b) exists, then (b, a) must also exist.</p>
+                </div>
+                <div class="triad-card" style="border-color: var(--accent-purple);">
+                    <h4 style="color: var(--accent-purple); margin-bottom:10px;">3. Transitive</h4>
+                    <p style="font-size:0.9rem; color:#d8b4fe;">Indirect networks seal: if (a, b) and (b, c) exist, then (a, c) must exist.</p>
+                </div>
+            </div>
+
+            <div class="content-box" style="border-color: var(--accent-purple); margin-top:30px;">
+                <h3 class="column-title" style="color: var(--accent-purple); text-align: center;">Validation Processing Engine</h3>
+                <input type="text" id="equivalenceInput" class="sim-input" placeholder="e.g., (1,1), (2,2), (3,3), (1,2), (2,1)">
+                <button onclick="checkEquivalence()" class="calc-btn" style="color: #fff; background: var(--accent-purple); border: none;">Analyze Configuration ⚡</button>
+                <div id="equivalence-resultBox" class="resultBox" style="font-size: 1.8rem; font-weight: 900;"></div>
+            </div>
+        </div>
+
+        <div id="set-difference" class="tab-content">
+            <div style="text-align: center;">
+                <h1 class="main-header" style="color: var(--accent-orange); animation: glow-orange 1.5s ease-in-out infinite alternate;">Set Difference</h1>
+                <div class="symbol-box">➖</div>
+            </div>
+            <div class="content-box" style="border: 4px solid var(--accent-orange);">
+                <h2 class="box-title" style="color: var(--accent-orange);">Relative Complement (A - B)</h2>
+                <p class="para">The difference engine calculates values that exist natively within Set A but are absent from Set B. This operation isolates unique dataset attributes by excluding intersecting values.</p>
+                
+                <div class="venn-wrapper">
+                    <div class="universal-box" style="border-color: var(--accent-orange);">
+                        <div class="universal-label">U</div>
+                        <div class="circle" style="left: 50px; background: rgba(249, 115, 22, 0.6); z-index: 1;">A</div>
+                        <div class="circle" style="right: 50px; background: rgba(255,255,255,0.05); border-style: dashed;">B</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="columns-wrapper">
+                <div class="column-box" style="border-color: var(--accent-orange);">
+                    <h3 class="column-title" style="color: var(--accent-orange);">Data Properties</h3>
+                    <p class="para" style="font-size: 0.95rem;">Set Difference is non-commutative: (A - B) yields a completely different membership profile than (B - A).</p>
+                </div>
+                <div class="column-box" style="border-color: var(--accent-orange);">
+                    <h3 class="column-title" style="color: var(--accent-orange);">Difference Calculator</h3>
+                    <label>Set A Elements:</label>
+                    <input type="text" id="diff-setA" placeholder="e.g., 1, 2, 3, 4">
+                    <label style="margin-top:10px; display:block;">Set B Elements:</label>
+                    <input type="text" id="diff-setB" placeholder="e.g., 3, 4, 5">
+                    
+                    <button onclick="runSetDifference()" class="calc-btn" style="background: var(--accent-orange); color:#fff; border:none;">Compute A - B ⚡</button>
+                    <div id="diff-resBox" class="result-panel">
+                        <h4 style="color: var(--accent-orange); font-size:1.5rem;">Calculated Subset:</h4>
+                        <p id="diff-out" style="font-size: 2rem; font-weight: 900; margin-top: 10px;"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="set-complement" class="tab-content">
+            <div style="text-align: center;">
+                <h1 class="main-header" style="color: var(--accent-rose); animation: glow-orange 1.5s ease-in-out infinite alternate;">Set Complement</h1>
+                <div class="symbol-box">🌓</div>
+            </div>
+            <div class="content-box" style="border: 4px solid var(--accent-rose);">
+                <h2 class="box-title" style="color: var(--accent-rose);">Universal Exclusion (A')</h2>
+                <p class="para">The Complement operation identifies all elements inside the Universal Set container environment that do not belong to the target Set A.</p>
+                
+                <div class="venn-wrapper">
+                    <div class="universal-box" style="background: rgba(74, 222, 128, 0.4); border-color: var(--accent-rose);">
+                        <div class="universal-label">U</div>
+                        <div class="circle" style="background: rgba(0,0,0,0.6); position: relative; left:0; top:0; margin: auto;">A</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="columns-wrapper">
+                <div class="column-box" style="border-color: var(--accent-rose);">
+                    <h3 class="column-title" style="color: var(--accent-rose);">Core Formula</h3>
+                    <p class="para" style="font-size: 1rem; font-family: monospace;">A' = U - A <br>Key Axiom: A ∪ A' = U</p>
+                </div>
+                <div class="column-box" style="border-color: var(--accent-rose);">
+                    <h3 class="column-title" style="color: var(--accent-rose);">Complement Calculator</h3>
+                    <label>Universal Set (U):</label>
+                    <input type="text" id="comp-univ" placeholder="e.g., 1, 2, 3, 4, 5, 6">
+                    <label style="margin-top:10px; display:block;">Set A Parameters:</label>
+                    <input type="text" id="comp-setA" placeholder="e.g., 1, 2, 3">
+                    
+                    <button onclick="runSetComplement()" class="calc-btn" style="background: var(--accent-rose); color:#fff; border:none;">Find Complement A' ⚡</button>
+                    <div id="comp-resBox" class="result-panel">
+                        <h4 style="color: var(--accent-rose); font-size:1.5rem;">Resulting Subset Set:</h4>
+                        <p id="comp-out" style="font-size: 2rem; font-weight: 900; margin-top: 10px;"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Tab Navigation Router
+        function switchTab(tabId) {
+            // Remove active declarations across modules
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // Activate selected dashboard parameters
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById('btn-' + tabId).classList.add('active');
+        }
+
+        // Shared Parsing Utility
+        function parsePairs(inputString) {
+            const extracted = inputString.match(/\(\d+,\s*\d+\)/g) || [];
+            return extracted.map(p => p.replace(/\s/g, ''));
+        }
+
+        function extractUniqueElements(normalizedPairs) {
+            return [...new Set(normalizedPairs.flatMap(p => p.match(/\d+/g)))];
+        }
+
+        // 1. AND Simulator Engine
+        function runAndSimulator() {
+            const p = document.getElementById('and-stmtA').value || "Premise P";
+            const q = document.getElementById('and-stmtB').value || "Premise Q";
+            const box = document.getElementById('and-resultBox');
+            const target = document.getElementById('and-resStatement');
+            
+            box.style.display = "block";
+            // Evaluate static condition text length presence check for presentation simulation
+            if(p !== "Premise P" && q !== "Premise Q") {
+                target.innerHTML = `"${p}" <span class="true-text">AND</span> "${q}" scales to operational verification pathways.`;
+            } else {
+                target.innerHTML = `<span class="false-text">False</span>: Fill simulator parameters to track logic pathways.`;
+            }
+        }
+
+        // 2. Implication Simulator Engine
+        function runImplicationSimulator() {
+            const p = document.getElementById('imp-stmtA').value || "";
+            const q = document.getElementById('imp-stmtB').value || "";
+            const box = document.getElementById('imp-resultBox');
+            const target = document.getElementById('imp-resStatement');
+            
+            box.style.display = "block";
+            if(p && q) {
+                target.innerHTML = `If <span class="true-text">"${p}"</span> holds true, then <span class="true-text">"${q}"</span> directly establishes performance criteria.`;
+            } else {
+                target.innerHTML = `Implication engine requires explicit conditional parameters.`;
+            }
+        }
+
+        // 3. Biconditional Simulator Engine
+        function runBiconditionalSimulator() {
+            const p = document.getElementById('bi-stmtA').value || "";
+            const q = document.getElementById('bi-stmtB').value || "";
+            const box = document.getElementById('bi-resultBox');
+            const target = document.getElementById('bi-resStatement');
+            
+            box.style.display = "block";
+            if(p && q) {
+                target.innerHTML = `<span class="true-text">"${p}"</span> matches logic criteria <span class="true-text">IF AND ONLY IF</span> <span class="true-text">"${q}"</span> maintains absolute status parity.`;
+            } else {
+                target.innerHTML = `Enter statement conditions to trace mutual logic verification pathways.`;
+            }
+        }
+
+        // 4. Identity Engine
+        function checkIdentity() {
+            const input = document.getElementById('identityInput').value;
+            const resBox = document.getElementById('identity-resultBox');
+            const normalized = parsePairs(input);
+            
+            if(normalized.length === 0) {
+                resBox.style.display = "block";
+                resBox.style.color = "var(--accent-amber)";
+                resBox.innerHTML = "⚠️ ENTER RELATION PAIRS!";
+                return;
+            }
+
+            const elements = extractUniqueElements(normalized);
+            let isIdentity = true;
+
+            // Rule 1: Every element must map to itself
+            elements.forEach(e => {
+                if (!normalized.includes(`(${e},${e})`)) isIdentity = false;
+            });
+
+            // Rule 2: Absolute structural isolation - no external mappings allowed
+            normalized.forEach(pair => {
+                const nums = pair.match(/\d+/g);
+                if (nums[0] !== nums[1]) isIdentity = false;
+            });
+
+            resBox.style.display = "block";
+            if (isIdentity) {
+                resBox.style.color = "var(--accent-green)";
+                resBox.innerHTML = "✓ IDENTITY CONFIRMED: Pure self-reflection verified.";
+            } else {
+                resBox.style.color = "var(--accent-rose)";
+                resBox.innerHTML = "❌ NOT AN IDENTITY RELATION: Extraneous paths or missing self-loops detected.";
+            }
+        }
+
+        // 5. Empty Relation Void Tracker
+        function triggerVoidConfirmation() {
+            const status = document.getElementById('voidStatus');
+            const resBox = document.getElementById('void-resultBox');
+            status.style.opacity = "0.2";
+            setTimeout(() => {
+                status.style.opacity = "1";
+                resBox.style.display = "block";
+                resBox.innerHTML = "EMPTY RELATION VECTOR VALIDATED: Absolute node isolation maintained.";
+            }, 300);
+        }
+
+        // 6. Antisymmetric Scanner
+        function checkAntisymmetric() {
+            const val = document.getElementById('antisymmetricInput').value;
+            const resBox = document.getElementById('antisymmetric-resultBox');
+            const normalized = parsePairs(val);
+            
+            if(normalized.length === 0) {
+                resBox.style.display = "block";
+                resBox.style.color = "var(--accent-amber)";
+                resBox.innerHTML = "⚠️ ENTER PAIRS!";
+                return;
+            }
+            
+            let isAntisymmetric = true;
+            normalized.forEach(pair => {
+                const nums = pair.match(/\d+/g);
+                const a = nums[0];
+                const b = nums[1];
+                
+                if (a !== b) {
+                    const reversed = `(${b},${a})`;
+                    if (normalized.includes(reversed)) isAntisymmetric = false;
+                }
+            });
+
+            resBox.style.display = "block";
+            if (isAntisymmetric) {
+                resBox.style.color = "var(--accent-green)";
+                resBox.innerHTML = "🛡️ ANTISYMMETRIC VALID: No reciprocal violations found.";
+            } else {
+                resBox.style.color = "var(--accent-rose)";
+                resBox.innerHTML = "❌ RECIPROCITY DETECTED: Dual-direction pathways break antisymmetry rules.";
+            }
+        }
+
+        // 7. Asymmetric Scanner
+        function checkAsymmetric() {
+            const val = document.getElementById('asymmetricInput').value;
+            const resBox = document.getElementById('asymmetric-resultBox');
+            const normalized = parsePairs(val);
+            
+            if(normalized.length === 0) {
+                resBox.style.display = "block";
+                resBox.style.color = "var(--accent-amber)";
+                resBox.innerHTML = "⚠️ ENTER PAIRS!";
+                return;
+            }
+            
+            let isAsymmetric = true;
+            normalized.forEach(pair => {
+                const nums = pair.match(/\d+/g);
+                const a = nums[0];
+                const b = nums[1];
+                
+                if (a === b) isAsymmetric = false; // Outlaw self-loops
+                
+                const reversed = `(${b},${a})`;
+                if (normalized.includes(reversed)) isAsymmetric = false; // Outlaw reciprocal return paths
+            });
+
+            resBox.style.display = "block";
+            if (isAsymmetric) {
+                resBox.style.color = "var(--accent-green)";
+                resBox.innerHTML = "🏹 ASYMMETRIC VALID: Pure directed coordinate paths verified.";
+            } else {
+                resBox.style.color = "var(--accent-rose)";
+                resBox.innerHTML = "❌ ASYMMETRY BROKEN: Reflexive self-loops or reciprocal returns found.";
+            }
+        }
+
+        // 8. Equivalence Processing Array Engine
+        function checkEquivalence() {
+            const val = document.getElementById('equivalenceInput').value;
+            const resBox = document.getElementById('equivalence-resultBox');
+            const normalized = parsePairs(val);
+            
+            if(normalized.length === 0) {
+                resBox.style.display = "block";
+                resBox.style.color = "var(--accent-amber)";
+                resBox.innerHTML = "⚠️ DATA REQUIRED";
+                return;
+            }
+
+            const elements = extractUniqueElements(normalized);
+            
+            let isRef = elements.every(e => normalized.includes(`(${e},${e})`));
+            let isSym = normalized.every(p => {
+                const [a, b] = p.match(/\d+/g);
+                return normalized.includes(`(${b},${a})`);
+            });
+            let isTrans = true;
+            
+            normalized.forEach(p1 => {
+                normalized.forEach(p2 => {
+                    const [a, b] = p1.match(/\d+/g);
+                    const [b2, c] = p2.match(/\d+/g);
+                    if (b === b2 && !normalized.includes(`(${a},${c})`)) isTrans = false;
+                });
+            });
+
+            resBox.style.display = "block";
+            if(isRef && isSym && isTrans) {
+                resBox.style.color = "var(--accent-purple)";
+                resBox.innerHTML = "⚖️ EQUIVALENCE CONFIRMED: Formed clean partition classes.";
+            } else {
+                resBox.style.color = "var(--accent-rose)";
+                resBox.innerHTML = `❌ MATRIX CRITERIA BROKEN: <br><span style="font-size:1.1rem; font-weight:400; color:#fff;">Reflexive: ${isRef ? '✓' : '❌'} | Symmetric: ${isSym ? '✓' : '❌'} | Transitive: ${isTrans ? '✓' : '❌'}</span>`;
+            }
+        }
+
+        // 9. Set Difference Logic Tool
+        function runSetDifference() {
+            let a = document.getElementById('diff-setA').value.split(',').map(x => x.trim()).filter(x => x);
+            let b = document.getElementById('diff-setB').value.split(',').map(x => x.trim()).filter(x => x);
+            let diff = a.filter(x => !b.includes(x));
+            
+            let resultPanel = document.getElementById('diff-resBox');
+            resultPanel.style.display = "block";
+            document.getElementById('diff-out').innerText = diff.length > 0 ? `{ ${[...new Set(diff)].join(', ')} }` : "∅ (Empty Set)";
+        }
+
+        // 10. Set Complement Logic Tool
+        function runSetComplement() {
+            let u = document.getElementById('comp-univ').value.split(',').map(x => x.trim()).filter(x => x);
+            let a = document.getElementById('comp-setA').value.split(',').map(x => x.trim()).filter(x => x);
+            let comp = u.filter(x => !a.includes(x));
+            
+            let resultPanel = document.getElementById('comp-resBox');
+            resultPanel.style.display = "block";
+            document.getElementById('comp-out').innerText = comp.length > 0 ? `{ ${[...new Set(comp)].join(', ')} }` : "∅ (Empty Set)";
+        }
+    </script>
+</body>
+</html>
